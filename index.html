@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tour Commune · VL·AU</title>
-<meta name="description" content="Tour Commune, Paris 13 — résidence étudiante de 222 logements en structure bois. Maquette 3D interactive. VL·AU Vincent Lavergne Architecture Urbanisme & Atelier WOA.">
+<meta name="description" content="Tour Commune, Paris 13 — résidence étudiante de 222 logements à structure mixte bois-béton. Maquette 3D interactive. VL·AU Vincent Lavergne Architecture Urbanisme & Atelier WOA.">
 <meta name="theme-color" content="#FFFFFF">
 <meta property="og:title" content="Tour Commune · VL·AU">
-<meta property="og:description" content="Paris 13, place Berlier — résidence étudiante de 222 logements en structure bois. Maquette 3D interactive. VL·AU Vincent Lavergne Architecture Urbanisme & Atelier WOA.">
+<meta property="og:description" content="Paris 13, place Berlier — résidence étudiante de 222 logements à structure mixte bois-béton. Maquette 3D interactive. VL·AU Vincent Lavergne Architecture Urbanisme & Atelier WOA.">
 <meta property="og:image" content="https://yannjouet00-netizen.github.io/tour-commune/assets/apercu.jpg">
 <meta property="og:url" content="https://yannjouet00-netizen.github.io/tour-commune/">
 <meta property="og:type" content="website">
@@ -15,7 +15,7 @@
 <link rel="icon" href="assets/favicon.png">
 <link rel="preload" href="assets/Fracktif-Light.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="assets/Fracktif-Medium.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="style.202609241852.css">
+<link rel="stylesheet" href="style.202609250107.css">
 </head>
 <body>
 <header>
@@ -44,6 +44,7 @@
       <button class="btn" id="b-ensemble" title="Revenir à la vue d’ensemble">↖<span class="txt">&nbsp;Ensemble</span></button>
       <button class="btn" id="b-plus" title="Rapprocher">+</button>
       <button class="btn" id="b-moins" title="Éloigner">−</button>
+      <button class="btn" id="b-son" title="Sons de la ville" aria-pressed="false"><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.8h3.2L10.5 4v12l-4.3-3.8H3z"/><path d="M13.2 7.4a3.6 3.6 0 0 1 0 5.2M15.4 5.2a6.8 6.8 0 0 1 0 9.6"/></svg><span class="txt">&nbsp;Sons</span></button>
       <button class="btn" id="b-plein" title="Plein écran">⛶</button>
     </div>
     <div class="ov" id="legende"><div class="n" id="leg-n"></div><h3 id="leg-t"></h3><p id="leg-p"></p></div>
@@ -51,6 +52,14 @@
       <div class="seg"><button class="btn on" id="m-tourner">Tourner</button><button class="btn" id="m-deplacer">Déplacer</button></div>
       <span id="aide-txt">Glissez pour tourner · double-clic pour s’approcher d’un point</span>
     </div>
+    <div class="ov" id="comparateur" hidden>
+      <div class="passe"></div>
+      <img alt="Rendu d’architecture" decoding="async">
+      <div class="rideau"><span class="poignee" role="slider" aria-label="Maquette / rendu" tabindex="0">◀ ▶</span></div>
+      <span class="etiq g">Maquette</span><span class="etiq d">Rendu</span>
+      <span class="attente">Chargement du rendu…</span>
+    </div>
+    <div class="ov" id="mode" aria-live="polite"></div>
     <div class="ov" id="astuce">Un doigt pour tourner · deux pour zoomer</div>
     <button class="ov" id="boussole" title="Nord en haut">
       <svg viewBox="-20 -20 40 40"><path d="M0-15 L5 3 L0 0 L-5 3Z" fill="#1D1E1C"/><path d="M0 15 L5 3 L0 0 L-5 3Z" fill="none" stroke="#1D1E1C" stroke-width="1"/><text x="0" y="-8" font-size="0" fill="#1D1E1C">N</text></svg>
@@ -70,24 +79,25 @@
     </nav>
     <div id="contenu">
       <div class="onglet on" data-o="vues">
-        <p class="intro">Une tour de 50 mètres en structure bois, posée sur la place Berlier. Tournez autour, puis entrez dans ses étages.</p>
+        <p class="intro">Une tour de 50 mètres à structure mixte bois-béton, posée sur la place Berlier. Tournez autour, puis entrez dans ses étages.</p>
         <div class="grille" id="vues"></div>
         <div class="ligne"><button class="btn" id="b-dessus">Vue de dessus</button><button class="btn" id="b-rotation">Rotation auto</button></div>
         <div class="chiffres">
           <div><div class="v">222</div><div class="k">logements étudiants</div></div>
-          <div><div class="v">50 m</div><div class="k">de hauteur, R+15</div></div>
-          <div><div class="v">6 000 m²</div><div class="k">surface</div></div>
+          <div><div class="v">50 m</div><div class="k">de hauteur, R+15</div></div>
+          <div><div class="v">6 000 m²</div><div class="k">surface</div></div>
           <div><div class="v">bois · béton</div><div class="k">structure mixte</div></div>
         </div>
       </div>
       <div class="onglet" data-o="visite">
-        <p class="intro">Une promenade commentée, de la place jusqu’au belvédère.</p>
+        <p class="intro">Une promenade commentée, du quartier jusqu’au belvédère, puis la tour la nuit.</p>
         <div class="visite-prog"><i id="visite-i"></i></div>
         <div class="grille" id="etapes"></div>
         <button class="btn large plein" id="b-visite">Lancer la visite</button>
       </div>
       <div class="onglet" data-o="etages">
-        <p class="intro">Isolez un niveau : les étages supérieurs et les plafonds s’effacent.</p>
+        <p class="intro">Isolez un niveau : il apparaît en plan, coupé à 1,30 m au-dessus du sol, murs en noir. Les flèches montent ou descendent d’un niveau.</p>
+        <div class="seg2"><button class="btn on" data-hplan="plan">Plan à 1,30 m</button><button class="btn" data-hplan="entier">Hauteur d’étage</button></div>
         <select id="sel-etage"></select>
         <div class="ligne"><button class="btn" id="b-niv-bas">↓ Niveau inférieur</button><button class="btn" id="b-niv-haut">Niveau supérieur ↑</button></div>
         <div class="etages" id="etages"></div>
@@ -105,22 +115,27 @@
         <p class="note">Les parties coupées apparaissent en noir, comme sur un plan.</p>
       </div>
       <div class="onglet" data-o="soleil">
-        <p class="intro">Réglez la date et l’heure : ombres réelles à Paris.</p>
-        <label class="ctrl"><span class="t"><span>Heure</span><b id="s-h-v"></b></span><input type="range" id="r-heure" min="5" max="22" step="0.05" value="15"></label>
+        <p class="intro">Réglez la date et l’heure : ombres calculées pour Paris, de jour comme de nuit.</p>
+        <label class="ctrl"><span class="t"><span>Heure</span><b id="s-h-v"></b></span><input type="range" id="r-heure" min="0" max="24" step="0.05" value="15"></label>
         <label class="ctrl"><span class="t"><span>Date</span><b id="s-d-v"></b></span><input type="range" id="r-jour" min="1" max="365" step="1" value="172"></label>
         <div class="seg2"><button class="btn" data-jour="355">Hiver</button><button class="btn" data-jour="80">Équinoxe</button><button class="btn on" data-jour="172">Été</button></div>
         <button class="btn large" id="b-journee">▶ Animer la journée</button>
         <p class="note" id="s-info"></p>
       </div>
       <div class="onglet" data-o="contexte">
-        <p class="intro">Situer la tour dans le quartier Bruneseau, entre Paris et Ivry : relief, voirie, voies ferrées et bâtiments relevés.</p>
+        <p class="intro">Situer la tour dans le quartier Bruneseau, entre Paris et Ivry : relief, voirie, voies ferrées et bâtiments voisins.</p>
         <label class="coche"><input type="checkbox" id="k-voisins" checked> Volumes des bâtiments voisins</label>
         <label class="coche"><input type="checkbox" id="k-arbres" checked> Arbres et végétation</label>
+        <label class="coche" id="k-vie-l" hidden><input type="checkbox" id="k-vie" checked> Tramway, voitures et piétons</label>
         <button class="btn large" id="b-quartier">Voir le quartier</button>
-        <p class="note" id="ctx-note">Relief : IGN LiDAR HD, recalé sur le plan de nivellement DCE (place Berlier). Bâtiments et ponts : IGN BD TOPO®, licence ouverte Etalab 2.0. Voirie, voies ferrées, arbres : OpenStreetMap (ODbL), hauteurs des arbres mesurées au LiDAR. Calage à ±10 cm en altitude.</p>
+        <p class="note" id="ctx-note">Relief : IGN, LiDAR HD (Licence Ouverte Etalab 2.0), recalé sur le plan de nivellement DCE (place Berlier). Bâtiments et ponts : IGN, BD TOPO® (Licence Ouverte Etalab 2.0). Voirie, voies ferrées, Seine, espaces verts et arbres : © les contributeurs d’<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (ODbL) ; hauteurs des arbres mesurées au LiDAR. Calage altimétrique vérifié à ±10 cm sur les cotes du plan de nivellement.</p>
       </div>
       <div class="onglet" data-o="rendu">
-        <p class="intro">Un aperçu calculé : ombres douces, lumière du ciel et contours affinés s’accumulent tant que la vue reste immobile.</p>
+        <div id="rendus-bloc" hidden>
+          <p class="intro">Rendus d’architecture : faites glisser le curseur pour passer de la maquette au rendu.</p>
+          <div class="grille" id="rendus"></div>
+        </div>
+        <p class="intro">Un aperçu calculé : ombres douces, lumière du ciel et contours affinés s’accumulent tant que la vue reste immobile.</p>
         <button class="btn large plein" id="b-rendu">Calculer l’aperçu de rendu</button>
         <div id="rendu-etat"></div>
         <div class="ligne"><button class="btn" id="b-capture">Enregistrer l’image</button></div>
@@ -141,8 +156,8 @@
 
 <div class="modal" id="m-apropos"><div class="boite">
   <div class="haut"><h2>À propos</h2><button class="fermer">Fermer</button></div>
-  <p class="intro">Tour Commune — résidence étudiante de 222 logements pour le Crous de Paris, sortie de métro et commerces. Maîtrise d’ouvrage Paris Habitat. Architectes VL·AU Vincent Lavergne Architecture Urbanisme &amp; Atelier WOA, avec Bouygues Construction, Egis et Elioth.</p>
-  <p class="note">Maquette issue du modèle Revit du projet (export 3D), allégée pour le web. Les matières sont indicatives. Contexte : données ouvertes IGN et Ville de Paris, calage indicatif.</p>
+  <p class="intro">Tour Commune — résidence de 222 logements pour étudiants et jeunes chercheurs, gérée par le Crous de Paris et L’Habitation Confortable, avec un commerce et l’emprise d’une future sortie de métro. Maîtrise d’ouvrage Paris Habitat. Architectes VL·AU Vincent Lavergne Architecture Urbanisme et Atelier WOA, en conception-réalisation avec Bouygues Habitat social, Egis et Elioth.</p>
+  <p class="note">Maquette issue du modèle Revit du projet (export 3D), allégée pour le web. Les métaux sont calés sur les photographies du bâtiment, les autres matières restent indicatives. Contexte : données ouvertes IGN (LiDAR HD, BD TOPO®) et © les contributeurs d’OpenStreetMap ; calage vérifié sur le plan de nivellement.</p>
   <dl class="aide">
     <dt>Tourner</dt><dd>glisser à un doigt</dd>
     <dt>Zoomer</dt><dd>pincer ou molette</dd>
@@ -151,6 +166,6 @@
   </dl>
 </div></div>
 
-<script type="module" src="app.202609241852.js"></script>
+<script type="module" src="app.202609250107.js"></script>
 </body>
 </html>
