@@ -6,16 +6,16 @@
 
    - Précache : tous les fichiers de FICHIERS, clé = chemin + empreinte. Un fichier inchangé d'une publication à l'autre
      est repris du cache précédent sans rien télécharger ; chaque téléchargement est vérifié contre son empreinte.
-   - index.html : réseau d'abord (3 s), mais seule la page de CETTE publication est servie. Si le réseau annonce une autre
-     publication, la page en cache (cohérente avec les fichiers en cache) est servie ; la nouvelle version s'installe en
-     arrière-plan, attend, et installer.js propose « Recharger ».
+   - index.html : réseau d'abord (3 s). Si le réseau annonce une autre publication, c'est elle qui est servie (le lien est
+     toujours à jour) et les fichiers publiés passent au réseau d'abord ; la nouvelle version s'installe en arrière-plan et
+     prend la main sans attendre. Hors connexion (ou réseau trop lent), la page en cache et ses fichiers.
    - Fichiers publiés : cache d'abord. Autres ressources du site : cache à la demande (60 entrées au plus, 15 Mo par fichier).
    - Jamais de réponse d'erreur, partielle (Range) ou opaque en cache. Anciens caches supprimés à l'activation.
    - Retrait : si l'origine sert les sources de développement (importmap) ou si la publication n'a plus de sw.js (404),
      le worker se désinscrit, vide ses caches et laisse tout passer au réseau, même s'il est redémarré entre-temps.
      Pour retirer l'application proprement, on peut aussi publier ce gabarit tel quel comme sw.js. */
-const VERSION = "202609250834";
-const FICHIERS = {"app.202609250834.js":"58d469b8af1b4986","assets/contexte.json":"632526c838a5b09c","assets/favicon.png":"da5b7aa6860a0732","assets/Fracktif-Light.woff":"1811ebf470263fe5","assets/Fracktif-LightItalic.woff":"1aed2a5dbcc6bb8f","assets/Fracktif-Medium.woff":"6ca4388a3c7e2b26","assets/Fracktif-Regular.woff":"d759c23e3d674578","assets/icones/apple-touch-icon.png":"d6eaa7b032d42778","assets/icones/icone-192.png":"416b85e86572d415","assets/icones/icone-512.png":"9d4cd5031cd664a4","assets/icones/icone-maskable-192.png":"1a6cedc19da349e3","assets/icones/icone-maskable-512.png":"7587a09f7bfe81e6","assets/interieur.json":"00682978a369c086","assets/metro.json":"09f3897f73c43156","assets/remplaces.json":"583d6076f1dbf0ec","assets/rendus/rendus.json":"cbf4f3613b87a518","assets/sol_horizon.jpg":"95fafd70afe2f1e8","assets/sol_loin_fondu.jpg":"89d91309367f2cc2","assets/sol_loin.jpg":"bd31f2778fc47f7c","assets/sol_proche.jpg":"a4d46e89e26f6a8f","assets/terrain.glb":"f7d57b1dcfa28efb","assets/tour.glb":"598c20c839862ec8","assets/vegetation.json":"5db3ecd10fe2e89b","assets/vlau-logo-blanc.png":"2086a34fe4659ac1","assets/vlau-logo.png":"c84b6080617a8d32","index.html":"2db95bbde4657793","installer.css":"98ff042ba6061b91","installer.js":"077a55c3bb15bfbc","manifest.webmanifest":"c76195b962ffc0b9","style.202609250834.css":"cb4f74d4de9fafff"};
+const VERSION = "202609250845";
+const FICHIERS = {"app.202609250845.js":"58d469b8af1b4986","assets/contexte.json":"632526c838a5b09c","assets/favicon.png":"da5b7aa6860a0732","assets/Fracktif-Light.woff":"1811ebf470263fe5","assets/Fracktif-LightItalic.woff":"1aed2a5dbcc6bb8f","assets/Fracktif-Medium.woff":"6ca4388a3c7e2b26","assets/Fracktif-Regular.woff":"d759c23e3d674578","assets/icones/apple-touch-icon.png":"d6eaa7b032d42778","assets/icones/icone-192.png":"416b85e86572d415","assets/icones/icone-512.png":"9d4cd5031cd664a4","assets/icones/icone-maskable-192.png":"1a6cedc19da349e3","assets/icones/icone-maskable-512.png":"7587a09f7bfe81e6","assets/interieur.json":"00682978a369c086","assets/metro.json":"09f3897f73c43156","assets/remplaces.json":"583d6076f1dbf0ec","assets/rendus/rendus.json":"cbf4f3613b87a518","assets/sol_horizon.jpg":"95fafd70afe2f1e8","assets/sol_loin_fondu.jpg":"89d91309367f2cc2","assets/sol_loin.jpg":"bd31f2778fc47f7c","assets/sol_proche.jpg":"a4d46e89e26f6a8f","assets/terrain.glb":"f7d57b1dcfa28efb","assets/tour.glb":"598c20c839862ec8","assets/vegetation.json":"5db3ecd10fe2e89b","assets/vlau-logo-blanc.png":"2086a34fe4659ac1","assets/vlau-logo.png":"c84b6080617a8d32","index.html":"cfcb39f007648b9f","installer.css":"98ff042ba6061b91","installer.js":"6ab7fd389fec94d8","manifest.webmanifest":"c76195b962ffc0b9","style.202609250834.css":"cb4f74d4de9fafff"};
 const PREFIXE = "tour-commune-";
 const CACHE = PREFIXE + VERSION;
 const DEMANDE = CACHE + "-demande";
@@ -25,6 +25,7 @@ const DELAI = 3000;
 const BASE = new URL("./", self.location.href).href;
 const DEV = VERSION === "dev";
 let retire = false;                            // retiré (voir plus haut) : ce worker ne sert plus rien
+let perime = false;                            // le réseau annonce une publication plus récente : réseau d'abord
 let enService = null;                          // promesse « le cache de cette version existe » : faux après un retrait,
                                                // y compris quand le navigateur a redémarré le worker (retire est alors perdu)
 
@@ -61,6 +62,7 @@ self.addEventListener("install", (e) => {
       }
     };
     await Promise.all([ouvrier(), ouvrier(), ouvrier(), ouvrier()]);   // 4 téléchargements à la fois
+    await self.skipWaiting();              // le lien doit toujours montrer la dernière publication : pas d'attente
   })());
 });
 
@@ -72,7 +74,10 @@ self.addEventListener("activate", (e) => e.waitUntil((async () => {
   await self.clients.claim();
 })()));
 
-self.addEventListener("message", (e) => { if (e.data === "activer") self.skipWaiting(); });
+self.addEventListener("message", (e) => {
+  if (e.data === "activer") self.skipWaiting();
+  if (e.data === "version" && e.source) e.source.postMessage({ version: VERSION });
+});
 
 self.addEventListener("fetch", (e) => {
   const r = e.request;
@@ -107,13 +112,20 @@ async function page(r) {
       retirer();
       return rep;
     }
-    return locale;                         // nouvelle publication : elle s'installe en arrière-plan, installer.js propose « Recharger »
+    // nouvelle publication : servie tout de suite (le lien est toujours à jour), ses fichiers pris au réseau d'abord ; elle
+    // s'installe en arrière-plan pour le hors-connexion
+    perime = true;
+    self.registration.update().catch(() => {});
+    return rep;
   } catch {
     return locale;
   }
 }
 
 async function publie(chemin, r, e) {
+  if (perime) {
+    try { const rep = await fetch(r, { cache: "no-cache" }); if (bon(rep)) return rep; } catch {}
+  }
   const trouve = await trouver(cle(chemin));
   if (trouve) return trouve;
   const rep = await fetch(r);              // copie absente (quota, nettoyage du navigateur) : réseau, rangée si l'empreinte est la bonne
