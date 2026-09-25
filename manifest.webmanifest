@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "Tour Commune · VL·AU",
+  "short_name": "Tour Commune",
+  "description": "Maquette 3D interactive de la Tour Commune, place Berlier (Paris 13) : résidence étudiante de 222 logements à structure mixte bois-béton. VL·AU Vincent Lavergne Architecture Urbanisme & Atelier WOA.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#1D1E1C",
+  "theme_color": "#1D1E1C",
+  "categories": ["business", "education", "lifestyle"],
+  "icons": [
+    { "src": "assets/icones/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icones/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icones/icone-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icones/icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icones/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ],
+  "screenshots": [
+    { "src": "assets/icones/capture-portrait.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "La tour sur la place Berlier, sur téléphone" },
+    { "src": "assets/icones/capture-paysage.jpg", "sizes": "1600x1000", "type": "image/jpeg", "form_factor": "wide", "label": "La maquette interactive et ses onglets : vues, visite, étages, coupes, soleil, contexte, rendu" }
+  ]
+}

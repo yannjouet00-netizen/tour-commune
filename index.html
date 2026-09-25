@@ -13,9 +13,16 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icones/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tour Commune">
 <link rel="preload" href="assets/Fracktif-Light.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="assets/Fracktif-Medium.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="style.202609250152.css">
+<link rel="stylesheet" href="style.202609250243.css">
+<link rel="stylesheet" href="installer.css">
 </head>
 <body class="ouverture">
 <header>
@@ -126,6 +133,7 @@
         <label class="ctrl"><span class="t"><span>Heure</span><b id="s-h-v"></b></span><input type="range" id="r-heure" min="0" max="24" step="0.05" value="15"></label>
         <label class="ctrl"><span class="t"><span>Date</span><b id="s-d-v"></b></span><input type="range" id="r-jour" min="1" max="365" step="1" value="172"></label>
         <div class="seg2"><button class="btn" data-jour="355">Hiver</button><button class="btn" data-jour="80">Équinoxe</button><button class="btn on" data-jour="172">Été</button></div>
+        <button class="btn large" id="b-direct" aria-pressed="false">En direct : l’heure de Paris maintenant</button>
         <button class="btn large" id="b-journee">▶ Animer la journée</button>
         <p class="note" id="s-info"></p>
       </div>
@@ -159,6 +167,7 @@
   <div id="qr"></div>
   <div class="url" id="url"></div>
   <div class="ligne"><button class="btn" id="b-copier">Copier le lien</button><button class="btn plein" id="b-envoyer">Envoyer…</button></div>
+  <button class="btn large" id="b-copier-vue">Copier le lien de cette vue (cadrage, heure, étage)</button>
 </div></div>
 
 <div class="modal" id="m-apropos"><div class="boite">
@@ -173,6 +182,7 @@
   </dl>
 </div></div>
 
-<script type="module" src="app.202609250152.js"></script>
+<script type="module" src="app.202609250243.js"></script>
+<script src="installer.js" defer></script>
 </body>
 </html>
